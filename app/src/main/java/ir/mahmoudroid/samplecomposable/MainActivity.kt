@@ -23,64 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-
-            ScrollableColumn(
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .background(Color(0xFF7A819C))
-            ) {
-                Image(
-                        bitmap = imageFromResource(
-                                res = resources,
-                                resId = R.drawable.happy_meal),
-                        modifier = Modifier.height(300.dp),
-                        contentScale = ContentScale.Crop
-                )
-
-                Column(
-                        modifier = Modifier.padding(10.dp)
-                ) {
-
-                    Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                                text = "Happy Meal",
-                                style = TextStyle(
-                                        fontSize = TextUnit.Companion.Sp(26)
-                                )
-                        )
-                        Text(
-                                text = "29$",
-                                style = TextStyle(
-                                        fontSize = TextUnit.Companion.Sp(14)
-                                ),
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Text(
-                            text = "800 calories",
-                            style = TextStyle(
-                                    fontSize = TextUnit.Companion.Sp(20)
-                            )
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    Button(
-                            onClick = {},
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Order Now")
-                    }
-
-
-
-                }
-
-            }
         }
     }
 }
