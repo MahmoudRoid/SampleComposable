@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                             onClick = {},
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                     ) {
-                        Text(text = "Order Now")
+                        Text(text = "order Now")
                     }
 
 
