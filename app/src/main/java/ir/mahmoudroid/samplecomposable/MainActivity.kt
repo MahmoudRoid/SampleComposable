@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.dp
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContentView(R.layout.activity_main)
 
-        }
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.main_container, RecipeListFragment())
+                .commit()
     }
 }
