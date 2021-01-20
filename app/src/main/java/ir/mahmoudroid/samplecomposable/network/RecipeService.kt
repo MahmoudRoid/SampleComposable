@@ -1,6 +1,6 @@
 package ir.mahmoudroid.samplecomposable.network
 
-import ir.mahmoudroid.samplecomposable.network.model.RecipeNetworkEntity
+import ir.mahmoudroid.samplecomposable.network.model.RecipeDto
 import ir.mahmoudroid.samplecomposable.network.response.RecipeSearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -19,6 +19,6 @@ interface RecipeService {
     suspend fun get(
             @Header("Authorization") token: String,
             @Query("id") id: Int
-    ): RecipeNetworkEntity
+    ): RecipeDto
 
 }

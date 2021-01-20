@@ -1,13 +1,13 @@
 package ir.mahmoudroid.samplecomposable.network.response
 
 import com.google.gson.annotations.SerializedName
-import ir.mahmoudroid.samplecomposable.network.model.RecipeNetworkEntity
+import ir.mahmoudroid.samplecomposable.network.model.RecipeDto
 
-class RecipeSearchResponse(
+data class RecipeSearchResponse(
 
         @SerializedName("count")
         var count: Int,
 
         @SerializedName("results")
-        var recipes: List<RecipeNetworkEntity>,
+        var recipes: List<RecipeDto>,
 )
