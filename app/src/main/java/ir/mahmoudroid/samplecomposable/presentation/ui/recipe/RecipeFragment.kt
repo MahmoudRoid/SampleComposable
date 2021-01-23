@@ -1,4 +1,4 @@
-package ir.mahmoudroid.samplecomposable
+package ir.mahmoudroid.samplecomposable.presentation.ui.recipe
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import ir.mahmoudroid.samplecomposable.ui.theme.typography
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecipeFragment:  Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
