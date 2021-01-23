@@ -1,6 +1,7 @@
 package ir.mahmoudroid.samplecomposable.presentation.ui.recipe_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,17 +24,14 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ir.mahmoudroid.samplecomposable.R
+import ir.mahmoudroid.samplecomposable.util.TAG
 
 
 @AndroidEntryPoint
 class RecipeListFragment: Fragment(){
 
-    val viewModel: RecipeListViewModel by viewModels()
+    private val viewModel: RecipeListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println("VIEWMODEL: $viewModel")
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -43,6 +41,15 @@ class RecipeListFragment: Fragment(){
 
         return ComposeView(requireContext()).apply {
             setContent {
+
+                // this will be changed when value changes in viewmodel ==> here it will be recomposed
+                // because we are in a composable funtion
+                val recipes = viewModel.recipes.value
+                for(recipe in recipes){
+                    Log.d(TAG, "RECIPE: ${recipe.title}")
+                }
+
+
                 Column(
                     modifier = Modifier
                         .border(border = BorderStroke(1.dp, Color.Black))
@@ -59,7 +66,8 @@ class RecipeListFragment: Fragment(){
 
                     Button(
                         onClick = {
-                            findNavController().navigate(R.id.action_recipeListFragment_to_recipeFragment)
+                            //findNavController().navigate(R.id.action_recipeListFragment_to_recipeFragment)
+                            viewModel.newSearch()
                         }
                     ) {
                         Text(text = "TO RECIPE FRAGMENT")
