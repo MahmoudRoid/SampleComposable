@@ -11,11 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import ir.mahmoudroid.samplecomposable.R
 import ir.mahmoudroid.samplecomposable.domain.model.Recipe
+import ir.mahmoudroid.samplecomposable.util.DEFAULT_RECIPE_IMAGE
+import ir.mahmoudroid.samplecomposable.util.loadPicture
 
 
 @Composable
@@ -38,14 +41,18 @@ fun RecipeCard(
 
         Column {
             // image
-            recipe.featuredImage?.let {
-                Image(
-                    bitmap = imageResource(id = R.drawable.empty_plate),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .preferredHeight(225.dp),
-                    contentScale = ContentScale.Crop
-                )
+            recipe.featuredImage?.let { url ->
+                val image = loadPicture(url = url, defaultImgae = DEFAULT_RECIPE_IMAGE).value
+                image?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .preferredHeight(225.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
             }
             // end of image
             // start of title
@@ -53,7 +60,7 @@ fun RecipeCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top=12.dp, bottom=12.dp, start = 8.dp, end=8.dp)
+                        .padding(top = 12.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
                 ) {
                     Text(
                         text = title,
@@ -72,12 +79,6 @@ fun RecipeCard(
                     )
                 }
             }
-
-
-
-
-
-
 
         }
 
