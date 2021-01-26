@@ -20,18 +20,18 @@ class RecipeListViewModel @ViewModelInject constructor(
 
     val recipes: MutableState<List<Recipe>> = mutableStateOf(ArrayList())
     // below code is written here instead of fragment => to avoid change data to initial value during screen rotation
-    val query =  mutableStateOf("chiken")
+    val query =  mutableStateOf("")
 
     init {
-        newSearch()
+        newSearch(query.value)
     }
 
-    fun newSearch(){
+    fun newSearch(query: String){
         viewModelScope.launch {
             val result = repository.search(
                     token = token,
                     page = 1,
-                    query = "chicken"
+                    query = query
             )
             recipes.value = result
         }
