@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
+import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyColumnFor
@@ -58,11 +59,13 @@ class RecipeListFragment: Fragment(){
                             color = MaterialTheme.colors.primary,
                             elevation = 8.dp,
                     ){
-                        Row(modifier = Modifier.fillMaxWidth()){
-                            TextField(
+                        
+                        Column {
+                            Row(modifier = Modifier.fillMaxWidth()){
+                                TextField(
                                     modifier = Modifier
-                                            .fillMaxWidth(.9f)
-                                            .padding(8.dp)
+                                        .fillMaxWidth(.9f)
+                                        .padding(8.dp)
                                     ,
                                     value = query,
                                     onValueChange = {
@@ -72,8 +75,8 @@ class RecipeListFragment: Fragment(){
                                         Text(text = "Search")
                                     },
                                     keyboardOptions = KeyboardOptions(
-                                            keyboardType = KeyboardType.Text,
-                                            imeAction = ImeAction.Done,
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Done,
                                     ),
                                     leadingIcon = {
                                         Icon(Icons.Filled.Search)
@@ -86,11 +89,21 @@ class RecipeListFragment: Fragment(){
                                     },
                                     textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                                     backgroundColor = MaterialTheme.colors.surface
-                            )
+                                )
+                            }
+                            // Scrollable Row
+                            ScrollableRow(modifier = Modifier.fillMaxWidth()){
+                                for(category in getAllFoodCategories()){
+                                    Text(
+                                        text = category.value,
+                                        style = MaterialTheme.typography.body2,
+                                        color = MaterialTheme.colors.secondary,
+                                        modifier = Modifier.padding(8.dp)
+                                    )
+                                }
+                            }
                         }
                     }
-
-
 
                     LazyColumn(content = {
                         itemsIndexed(
