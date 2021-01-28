@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ir.mahmoudroid.samplecomposable.domain.model.Recipe
+import ir.mahmoudroid.samplecomposable.presentation.components.CircularIndeterminateProgressBar
 import ir.mahmoudroid.samplecomposable.presentation.components.FoodCategoryChip
 import ir.mahmoudroid.samplecomposable.presentation.components.RecipeCard
 import ir.mahmoudroid.samplecomposable.presentation.components.SearchAppBar
@@ -54,6 +55,8 @@ class RecipeListFragment: Fragment(){
 
                 val categoryScrollPosition = viewModel.categoryScrollPosition
 
+                val loading = viewModel.loading.value
+
                 Column {
 
                     SearchAppBar(
@@ -67,12 +70,23 @@ class RecipeListFragment: Fragment(){
                             onChangeScrollPosition = viewModel::onChangeCategoryScrollPosition,
                     )
 
-                    LazyColumn {
-                        itemsIndexed(
-                                items = recipes
-                        ){index, recipe ->
-                            RecipeCard(recipe = recipe, onClick = {})
+                    // box means ==> every children lays over each other
+                    // it has Priority from TOP to DOWN
+                    // persian ==> children roo ham mioftan
+                    // dar in halat progressbar miofte roo recycler
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+
+                        LazyColumn {
+                            itemsIndexed(
+                                    items = recipes
+                            ) { index, recipe ->
+                                RecipeCard(recipe = recipe, onClick = {})
+                            }
                         }
+
+                        CircularIndeterminateProgressBar(isDisplayed = loading)
+
                     }
                 }
             }
