@@ -51,6 +51,7 @@ class RecipeListFragment: Fragment(){
 
                 val query = viewModel.query.value  // first way
 
+                val selectedCategory = viewModel.selectedCategory.value
 
                 Column {
                     // Toolbar not used because of fixed height ==> but surface can has flexible size
@@ -85,7 +86,7 @@ class RecipeListFragment: Fragment(){
                                         },
                                         onImeActionPerformed = { action, softKeyboardController ->
                                             if (action == ImeAction.Done) {
-                                                viewModel.newSearch(query)
+                                                viewModel.newSearch()
                                                 softKeyboardController?.hideSoftwareKeyboard()
                                             }
                                         },
@@ -98,12 +99,11 @@ class RecipeListFragment: Fragment(){
                                 for(category in getAllFoodCategories()){
                                     FoodCategoryChip(
                                             category = category.value,
-                                            onExecuteSearch = {
-                                                viewModel.apply {
-                                                    onQueryChanged(it)
-                                                    newSearch(it)
-                                                }
-                                            }
+                                            isSelected = selectedCategory == category,
+                                            onSelectedCategoryChanged = {
+                                                viewModel.onSelectedCategoryChanged(it)
+                                            },
+                                            onExecuteSearch = viewModel::newSearch
                                     )
                                 }
                             }
