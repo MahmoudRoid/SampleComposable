@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ir.mahmoudroid.samplecomposable.domain.model.Recipe
+import ir.mahmoudroid.samplecomposable.presentation.components.FoodCategoryChip
 import ir.mahmoudroid.samplecomposable.presentation.components.RecipeCard
 
 
@@ -56,49 +58,52 @@ class RecipeListFragment: Fragment(){
                             modifier = Modifier
                                     .fillMaxWidth()
                             ,
-                            color = MaterialTheme.colors.primary,
+                            color = Color.White,
                             elevation = 8.dp,
                     ){
-                        
+
                         Column {
                             Row(modifier = Modifier.fillMaxWidth()){
                                 TextField(
-                                    modifier = Modifier
-                                        .fillMaxWidth(.9f)
-                                        .padding(8.dp)
-                                    ,
-                                    value = query,
-                                    onValueChange = {
-                                        viewModel.onQueryChanged(it)
-                                    },
-                                    label = {
-                                        Text(text = "Search")
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Text,
-                                        imeAction = ImeAction.Done,
-                                    ),
-                                    leadingIcon = {
-                                        Icon(Icons.Filled.Search)
-                                    },
-                                    onImeActionPerformed = { action, softKeyboardController ->
-                                        if (action == ImeAction.Done) {
-                                            viewModel.newSearch(query)
-                                            softKeyboardController?.hideSoftwareKeyboard()
-                                        }
-                                    },
-                                    textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                                    backgroundColor = MaterialTheme.colors.surface
+                                        modifier = Modifier
+                                                .fillMaxWidth(.9f)
+                                                .padding(8.dp)
+                                        ,
+                                        value = query,
+                                        onValueChange = {
+                                            viewModel.onQueryChanged(it)
+                                        },
+                                        label = {
+                                            Text(text = "Search")
+                                        },
+                                        keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Text,
+                                                imeAction = ImeAction.Done,
+                                        ),
+                                        leadingIcon = {
+                                            Icon(Icons.Filled.Search)
+                                        },
+                                        onImeActionPerformed = { action, softKeyboardController ->
+                                            if (action == ImeAction.Done) {
+                                                viewModel.newSearch(query)
+                                                softKeyboardController?.hideSoftwareKeyboard()
+                                            }
+                                        },
+                                        textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
+                                        backgroundColor = MaterialTheme.colors.surface
                                 )
                             }
                             // Scrollable Row
                             ScrollableRow(modifier = Modifier.fillMaxWidth()){
                                 for(category in getAllFoodCategories()){
-                                    Text(
-                                        text = category.value,
-                                        style = MaterialTheme.typography.body2,
-                                        color = MaterialTheme.colors.secondary,
-                                        modifier = Modifier.padding(8.dp)
+                                    FoodCategoryChip(
+                                            category = category.value,
+                                            onExecuteSearch = {
+                                                viewModel.apply {
+                                                    onQueryChanged(it)
+                                                    newSearch(it)
+                                                }
+                                            }
                                     )
                                 }
                             }
@@ -107,7 +112,7 @@ class RecipeListFragment: Fragment(){
 
                     LazyColumn(content = {
                         itemsIndexed(
-                            items = recipes
+                                items = recipes
                         ) { index: Int, item: Recipe ->
                             RecipeCard(recipe = item, onClick = {})
                         }
