@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.mahmoudroid.samplecomposable.domain.model.Recipe
 import ir.mahmoudroid.samplecomposable.presentation.components.FoodCategoryChip
 import ir.mahmoudroid.samplecomposable.presentation.components.RecipeCard
+import ir.mahmoudroid.samplecomposable.presentation.components.SearchAppBar
 
 
 @AndroidEntryPoint
@@ -42,93 +43,38 @@ class RecipeListFragment: Fragment(){
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-
         return ComposeView(requireContext()).apply {
             setContent {
 
-                // this will be changed when value changes in viewmodel ==> here it will be recomposed
-                // because we are in a composable funtion
                 val recipes = viewModel.recipes.value
 
-                val query = viewModel.query.value  // first way
+                val query = viewModel.query.value
 
                 val selectedCategory = viewModel.selectedCategory.value
 
+                val categoryScrollPosition = viewModel.categoryScrollPosition
+
                 Column {
-                    // Toolbar not used because of fixed height ==> but surface can has flexible size
-                    Surface(
-                            modifier = Modifier
-                                    .fillMaxWidth()
-                            ,
-                            color = Color.White,
-                            elevation = 8.dp,
-                    ){
 
-                        Column {
-                            Row(modifier = Modifier.fillMaxWidth()){
-                                TextField(
-                                        modifier = Modifier
-                                                .fillMaxWidth(.9f)
-                                                .padding(8.dp)
-                                        ,
-                                        value = query,
-                                        onValueChange = {
-                                            viewModel.onQueryChanged(it)
-                                        },
-                                        label = {
-                                            Text(text = "Search")
-                                        },
-                                        keyboardOptions = KeyboardOptions(
-                                                keyboardType = KeyboardType.Text,
-                                                imeAction = ImeAction.Done,
-                                        ),
-                                        leadingIcon = {
-                                            Icon(Icons.Filled.Search)
-                                        },
-                                        onImeActionPerformed = { action, softKeyboardController ->
-                                            if (action == ImeAction.Done) {
-                                                viewModel.newSearch()
-                                                softKeyboardController?.hideSoftwareKeyboard()
-                                            }
-                                        },
-                                        textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
-                                        backgroundColor = MaterialTheme.colors.surface
-                                )
-                            }
+                    SearchAppBar(
+                            query = query,
+                            onQueryChanged = viewModel::onQueryChanged,
+                            onExecuteSearch = viewModel::newSearch,
+                            categories = getAllFoodCategories(),
+                            selectedCategory = selectedCategory,
+                            onSelectedCategoryChanged = viewModel::onSelectedCategoryChanged,
+                            scrollPosition = categoryScrollPosition,
+                            onChangeScrollPosition = viewModel::onChangeCategoryScrollPosition,
+                    )
 
-                            // Scrollable Row
-                            val scrollState = rememberScrollState()
-                            ScrollableRow(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    scrollState = scrollState
-                            ){
-                                scrollState.scrollTo(viewModel.categoryScrollPosition)
-
-                                for(category in getAllFoodCategories()){
-                                    FoodCategoryChip(
-                                            category = category.value,
-                                            isSelected = selectedCategory == category,
-                                            onSelectedCategoryChanged = {
-                                                viewModel.onSelectedCategoryChanged(it)
-                                                // set scroll position
-                                                viewModel.onChangeCategoryScrollPosition(scrollState.value)
-                                            },
-                                            onExecuteSearch = viewModel::newSearch
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    LazyColumn(content = {
+                    LazyColumn {
                         itemsIndexed(
                                 items = recipes
-                        ) { index: Int, item: Recipe ->
-                            RecipeCard(recipe = item, onClick = {})
+                        ){index, recipe ->
+                            RecipeCard(recipe = recipe, onClick = {})
                         }
-                    })
+                    }
                 }
-
             }
         }
     }
