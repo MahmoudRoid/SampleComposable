@@ -85,7 +85,7 @@ class RecipeListFragment: Fragment(){
                             }
                         }
 
-                        CircularIndeterminateProgressBar(isDisplayed = loading)
+                        CircularIndeterminateProgressBar(isDisplayed = loading, verticalBias = 0.3f)
 
                     }
                 }
